@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Tabs, Tab, Typography } from '@mui/material';
-import { Email, Mail, Article, Settings } from '@mui/icons-material';
+import { Email, Mail, Article, Settings, Build } from '@mui/icons-material';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,6 +50,7 @@ const Layout: React.FC = () => {
           <Tab label="AI Analysis" icon={<Email />} {...a11yProps(1)} />
           <Tab label="Article" icon={<Article />} {...a11yProps(2)} />
           <Tab label="WordPress" icon={<Settings />} {...a11yProps(3)} />
+          <Tab label="Settings" icon={<Build />} {...a11yProps(4)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -63,6 +64,9 @@ const Layout: React.FC = () => {
       </TabPanel>
       <TabPanel value={value} index={3}>
         WordPress Integration - Coming Soon
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        Settings & Configuration - Coming Soon
       </TabPanel>
     </Box>
   );

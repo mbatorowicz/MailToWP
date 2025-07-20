@@ -198,20 +198,9 @@ export interface WordPressPost {
   date: Date;
   modified: Date;
   slug: string;
-}
-
-export interface WordPressMedia {
-  id: number;
-  url: string;
-  title: string;
-  altText?: string;
-  caption?: string;
-  description?: string;
-  mimeType: string;
-  fileSize: number;
-  width?: number;
-  height?: number;
-  uploadedAt: Date;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
 }
 
 export interface WordPressCategory {
@@ -220,6 +209,7 @@ export interface WordPressCategory {
   slug: string;
   description?: string;
   count: number;
+  parent?: number;
 }
 
 export interface WordPressTag {
@@ -236,19 +226,282 @@ export interface WordPressUser {
   username: string;
   email: string;
   roles: string[];
-  capabilities: string[];
+  avatar?: string;
 }
 
-export interface WordPressConnectionTest {
-  success: boolean;
-  message: string;
-  user?: WordPressUser;
-  siteInfo?: {
-    name: string;
-    description: string;
-    url: string;
-    version: string;
+export interface WordPressUploadResponse {
+  id: number;
+  url: string;
+  altText?: string;
+  caption?: string;
+  description?: string;
+  mediaType: string;
+  mimeType: string;
+  sizes: {
+    thumbnail?: string;
+    medium?: string;
+    large?: string;
+    full?: string;
   };
+}
+
+export interface WordPressPublishRequest {
+  title: string;
+  content: string;
+  excerpt?: string;
+  status: 'publish' | 'draft' | 'private' | 'pending';
+  categories?: number[];
+  tags?: number[];
+  featuredImageId?: number;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+}
+
+export interface WordPressPublishResponse {
+  success: boolean;
+  postId?: number;
+  url?: string;
+  error?: string;
+}
+```
+
+## 🖼️ IMAGE TYPES
+
+```typescript
+// shared/types/image.ts
+
+export interface ImageProcessingOptions {
+  maxWidth: number;
+  maxHeight: number;
+  quality: number;
+  format: 'jpeg' | 'png' | 'webp';
+  optimize: boolean;
+  generateThumbnails: boolean;
+  watermark?: WatermarkOptions;
+}
+
+export interface WatermarkOptions {
+  text?: string;
+  imagePath?: string;
+  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
+  opacity: number;
+  fontSize?: number;
+  color?: string;
+}
+
+export interface ImageProcessingResult {
+  original: ImageInfo;
+  processed: ImageInfo;
+  thumbnails: ImageInfo[];
+  metadata: ImageMetadata;
+}
+
+export interface ImageInfo {
+  path: string;
+  filename: string;
+  size: number;
+  width: number;
+  height: number;
+  format: string;
+  mimeType: string;
+  hasAlpha: boolean;
+  isOpaque: boolean;
+  orientation?: number;
+}
+
+export interface ImageMetadata {
+  exif?: Record<string, any>;
+  iptc?: Record<string, any>;
+  xmp?: Record<string, any>;
+  icc?: Record<string, any>;
+}
+
+export interface ImageUploadRequest {
+  file: File;
+  options?: ImageProcessingOptions;
+  altText?: string;
+  caption?: string;
+}
+
+export interface ImageUploadResponse {
+  success: boolean;
+  image?: ProcessedImage;
+  error?: string;
+}
+
+export interface ImageGallery {
+  id: string;
+  name: string;
+  images: ProcessedImage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+## 🎛️ SETTINGS TYPES
+
+```typescript
+// shared/types/settings.ts
+
+export interface AppSettings {
+  general: GeneralSettings;
+  gmail: GmailSettings;
+  ai: AISettings;
+  wordpress: WordPressSettings;
+  article: ArticleSettings;
+  ui: UISettings;
+  notifications: NotificationSettings;
+}
+
+export interface GeneralSettings {
+  language: 'pl' | 'en';
+  theme: 'light' | 'dark' | 'auto';
+  autoSave: boolean;
+  autoSaveInterval: number; // minutes
+  maxFileSize: number; // MB
+  supportedFormats: string[];
+  dataRetention: number; // days
+}
+
+export interface GmailSettings {
+  autoRefresh: boolean;
+  refreshInterval: number; // minutes
+  defaultFilters: EmailFilters;
+  maxEmailsPerPage: number;
+  showUnreadOnly: boolean;
+  autoMarkAsRead: boolean;
+  downloadAttachments: boolean;
+  attachmentSizeLimit: number; // MB
+}
+
+export interface AISettings {
+  defaultModel: 'gpt-4' | 'gpt-3.5-turbo' | 'claude-3';
+  temperature: number;
+  maxTokens: number;
+  defaultLanguage: 'pl' | 'en';
+  autoAnalyze: boolean;
+  confidenceThreshold: number;
+  promptTemplates: AIPrompt[];
+  customPrompts: AIPrompt[];
+}
+
+export interface WordPressSettings {
+  defaultSite: string;
+  autoPublish: boolean;
+  defaultStatus: 'publish' | 'draft' | 'private';
+  defaultCategory: number;
+  defaultTags: number[];
+  featuredImageSettings: FeaturedImageSettings;
+  seoSettings: SEOSettings;
+  contentSettings: ContentSettings;
+}
+
+export interface FeaturedImageSettings {
+  autoSetFeatured: boolean;
+  defaultAltText: string;
+  defaultCaption: string;
+  resizeForWeb: boolean;
+  maxWidth: number;
+  maxHeight: number;
+  quality: number;
+}
+
+export interface SEOSettings {
+  autoGenerateTitle: boolean;
+  autoGenerateDescription: boolean;
+  autoGenerateKeywords: boolean;
+  titleTemplate: string;
+  descriptionTemplate: string;
+  keywordsTemplate: string;
+  focusKeyword?: string;
+}
+
+export interface ContentSettings {
+  autoFormatContent: boolean;
+  removeEmailHeaders: boolean;
+  addReadMore: boolean;
+  defaultExcerptLength: number;
+  autoAddTags: boolean;
+  autoAddCategories: boolean;
+}
+
+export interface ArticleSettings {
+  defaultTitle: string;
+  defaultCategory: string;
+  defaultTags: string[];
+  autoGenerateSlug: boolean;
+  slugTemplate: string;
+  exportFormats: ('html' | 'markdown' | 'json')[];
+  defaultExportFormat: 'html' | 'markdown' | 'json';
+  imageProcessing: ImageProcessingOptions;
+  contentTemplates: ContentTemplate[];
+}
+
+export interface ContentTemplate {
+  id: string;
+  name: string;
+  content: string;
+  isDefault: boolean;
+  variables: string[];
+}
+
+export interface UISettings {
+  sidebarCollapsed: boolean;
+  showTooltips: boolean;
+  showKeyboardShortcuts: boolean;
+  animationsEnabled: boolean;
+  compactMode: boolean;
+  fontSize: 'small' | 'medium' | 'large';
+  colorScheme: 'default' | 'high-contrast' | 'colorblind-friendly';
+}
+
+export interface NotificationSettings {
+  emailNotifications: boolean;
+  desktopNotifications: boolean;
+  soundEnabled: boolean;
+  notificationTypes: {
+    emailFetched: boolean;
+    aiAnalysisComplete: boolean;
+    articleCreated: boolean;
+    wordpressUploaded: boolean;
+    errorOccurred: boolean;
+  };
+  notificationDuration: number; // seconds
+}
+
+export interface SettingsUpdateRequest {
+  section: keyof AppSettings;
+  settings: Partial<AppSettings[keyof AppSettings]>;
+}
+
+export interface SettingsUpdateResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
+export interface SettingsExportRequest {
+  includeSensitiveData: boolean;
+  format: 'json' | 'yaml';
+}
+
+export interface SettingsExportResponse {
+  success: boolean;
+  data?: string;
+  error?: string;
+}
+
+export interface SettingsImportRequest {
+  data: string;
+  format: 'json' | 'yaml';
+  overwrite: boolean;
+}
+
+export interface SettingsImportResponse {
+  success: boolean;
+  importedSections: string[];
+  errors: string[];
 }
 ```
 
@@ -257,122 +510,82 @@ export interface WordPressConnectionTest {
 ```typescript
 // shared/types/store.ts
 
-export interface EmailStore {
+export interface AppState {
+  emails: EmailState;
+  ai: AIState;
+  articles: ArticleState;
+  wordpress: WordPressState;
+  images: ImageState;
+  settings: SettingsState;
+  ui: UIState;
+}
+
+export interface EmailState {
   emails: Email[];
   selectedEmails: string[];
-  isLoading: boolean;
-  error: string | null;
   filters: EmailFilters;
+  loading: boolean;
+  error?: string;
   hasMore: boolean;
-  
-  fetchEmails: (filters?: EmailFilters) => Promise<void>;
-  loadMoreEmails: () => Promise<void>;
-  selectEmail: (id: string) => void;
-  deselectEmail: (id: string) => void;
-  clearSelection: () => void;
-  updateFilters: (filters: Partial<EmailFilters>) => void;
-  clearError: () => void;
+  total: number;
 }
 
-export interface AIStore {
+export interface AIState {
   analyses: AIAnalysis[];
-  isAnalyzing: boolean;
-  prompt: string;
-  error: string | null;
-  currentPromptId: string | null;
-  
-  analyzeEmails: (emailIds: string[]) => Promise<void>;
-  updatePrompt: (prompt: string) => void;
-  savePrompt: () => Promise<void>;
-  loadPrompt: (promptId: string) => Promise<void>;
-  clearAnalyses: () => void;
-  clearError: () => void;
+  currentAnalysis?: AIAnalysis;
+  loading: boolean;
+  error?: string;
+  progress: number;
+  model: string;
+  temperature: number;
 }
 
-export interface ArticleStore {
-  currentArticle: Article | null;
-  processedImages: ProcessedImage[];
-  exportPath: string;
-  isCreating: boolean;
-  isExporting: boolean;
-  error: string | null;
-  
-  createArticle: (emailIds: string[]) => Promise<void>;
-  updateImageOrder: (newOrder: ProcessedImage[]) => void;
-  updateImageMetadata: (imageId: string, metadata: Partial<ProcessedImage>) => void;
-  exportArticle: (format?: string) => Promise<void>;
-  uploadToWordPress: () => Promise<WordPressPost>;
-  clearArticle: () => void;
-  clearError: () => void;
+export interface ArticleState {
+  articles: Article[];
+  currentArticle?: Article;
+  drafts: Article[];
+  loading: boolean;
+  error?: string;
+  saving: boolean;
 }
 
-export interface WordPressStore {
-  config: WordPressConfig | null;
-  isConnected: boolean;
-  isUploading: boolean;
-  error: string | null;
+export interface WordPressState {
+  sites: WordPressConfig[];
+  currentSite?: WordPressConfig;
+  posts: WordPressPost[];
   categories: WordPressCategory[];
   tags: WordPressTag[];
-  currentUser?: WordPressUser;
-  
-  updateConfig: (config: Partial<WordPressConfig>) => void;
-  saveConfig: () => void;
-  loadConfig: () => void;
-  testConnection: () => Promise<boolean>;
-  fetchCategories: () => Promise<void>;
-  fetchTags: () => Promise<void>;
-  clearError: () => void;
+  users: WordPressUser[];
+  loading: boolean;
+  error?: string;
+  uploading: boolean;
 }
 
-export interface UIStore {
-  activeTab: string;
+export interface ImageState {
+  images: ProcessedImage[];
+  selectedImages: string[];
+  processing: boolean;
+  error?: string;
+  progress: number;
+  galleries: ImageGallery[];
+}
+
+export interface SettingsState {
+  settings: AppSettings;
+  loading: boolean;
+  saving: boolean;
+  error?: string;
+  lastSaved?: Date;
+}
+
+export interface UIState {
+  currentTab: number;
   sidebarOpen: boolean;
+  notifications: Notification[];
+  dialogs: DialogProps[];
+  loadingStates: Record<string, LoadingState>;
   theme: 'light' | 'dark';
   language: 'pl' | 'en';
-  
-  setActiveTab: (tab: string) => void;
-  toggleSidebar: () => void;
-  setTheme: (theme: 'light' | 'dark') => void;
-  setLanguage: (language: 'pl' | 'en') => void;
-}
-```
-
-## 🗂️ API TYPES
-
-```typescript
-// shared/types/api.ts
-
-export interface APIResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-  page: number;
-  limit: number;
-  hasMore: boolean;
-}
-
-export interface EmailAPIResponse extends APIResponse<EmailListResponse> {}
-export interface EmailDetailsAPIResponse extends APIResponse<EmailDetailsResponse> {}
-export interface AIAnalysisAPIResponse extends APIResponse<AIAnalysisResponse> {}
-export interface ArticleAPIResponse extends APIResponse<Article> {}
-export interface WordPressAPIResponse extends APIResponse<WordPressConnectionTest> {}
-
-export interface APIError {
-  code: string;
-  message: string;
-  details?: any;
-}
-
-export interface UploadProgress {
-  loaded: number;
-  total: number;
-  percentage: number;
 }
 ```
 
@@ -380,14 +593,6 @@ export interface UploadProgress {
 
 ```typescript
 // shared/types/ui.ts
-
-export interface TabItem {
-  id: string;
-  label: string;
-  icon?: string;
-  component: React.ComponentType;
-  disabled?: boolean;
-}
 
 export interface MenuItem {
   id: string;
@@ -517,6 +722,7 @@ export const API_ENDPOINTS = {
   ARTICLES: '/api/articles',
   WORDPRESS: '/api/wordpress',
   IMAGES: '/api/images',
+  SETTINGS: '/api/settings',
 } as const;
 
 export const SUPPORTED_IMAGE_FORMATS = [
@@ -582,6 +788,7 @@ export const SUCCESS_MESSAGES = {
   ARTICLE_EXPORTED: 'Artykuł został wyeksportowany',
   WORDPRESS_UPLOADED: 'Artykuł został wysłany do WordPress',
   CONFIG_SAVED: 'Konfiguracja została zapisana',
+  SETTINGS_SAVED: 'Ustawienia zostały zapisane',
 } as const;
 ```
 
