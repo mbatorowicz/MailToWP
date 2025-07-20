@@ -1,0 +1,21 @@
+{
+  "name": "mailtowp-v2",
+  "version": "2.0.0",
+  "description": "MailToWP v2 - Desktop application for email to WordPress conversion",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter renderer dev\" \"pnpm --filter api dev\"",
+    "dev:all": "concurrently \"pnpm --filter main dev\" \"pnpm --filter renderer dev\" \"pnpm --filter api dev\"",
+    "build": "pnpm --filter main build && pnpm --filter renderer build && pnpm --filter api build",
+    "start": "pnpm --filter main start",
+    "clean": "pnpm --filter main clean && pnpm --filter renderer clean && pnpm --filter api clean",
+    "install:all": "pnpm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "apps/*",
+    "shared"
+  ]
+}
