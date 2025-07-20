@@ -6,6 +6,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Electron](https://img.shields.io/badge/Electron-28.3.3-green.svg)](https://www.electronjs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-workspace-orange.svg)](https://pnpm.io/)
+[![Status: In Development](https://img.shields.io/badge/Status-In%20Development-orange.svg)](https://github.com/mbatorowicz/MailToWP)
 
 ## 📋 Overview
 
@@ -14,188 +16,150 @@ MailToWP v2 is a powerful desktop application that helps you convert emails into
 ## ✨ Features
 
 - **📧 Gmail Integration** - Connect to Gmail and fetch emails
-- **🤖 AI Analysis** - Analyze email content with OpenAI/Claude
+- **🤖 AI Analysis** - Analyze email content with OpenAI/Anthropic
+- **📝 Article Management** - Create and edit WordPress articles
 - **🖼️ Image Processing** - Process and optimize images with Sharp
-- **📝 Article Management** - Create and edit articles
-- **🌐 WordPress Integration** - Direct publishing to WordPress
-- **🎨 Modern UI** - Beautiful Material-UI interface
-- **⚡ Performance** - Fast and responsive desktop app
+- **🌐 WordPress Publishing** - Direct publishing to WordPress sites
+- **💾 Local Storage** - Save credentials and settings locally
+- **🎨 Modern UI** - Beautiful interface with Material-UI
 
 ## 🏗️ Architecture
 
 ```
-MailToWP-v2/
-├── apps/
-│   ├── main/          # Electron main process
-│   ├── renderer/      # React frontend
-│   └── api/           # Express backend
-├── shared/            # Shared types and utilities
-└── docs/             # Documentation
+📁 MailToWP-v2/
+├── 📁 apps/
+│   ├── 🖥️ main/ (Electron - Desktop App)
+│   ├── 🎨 renderer/ (React - Frontend)
+│   └── 🔌 api/ (Express - Backend)
+├── 📁 shared/ (TypeScript Types & Constants)
+└── 📁 docs/ (Documentation)
 ```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-
 - Node.js 18+ 
 - pnpm 8+
 - Git
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/mailtowp-v2.git
-   cd mailtowp-v2
-   ```
+```bash
+# Clone repository
+git clone https://github.com/mbatorowicz/MailToWP.git
+cd MailToWP
 
-2. **Install dependencies**
-   ```bash
-   pnpm install
-   ```
+# Install dependencies
+pnpm install
 
-3. **Start development server**
-   ```bash
-   pnpm dev
-   ```
+# Start development servers
+pnpm dev
+```
 
-4. **Open the application**
-   - Frontend: http://localhost:3000
-   - API: http://localhost:3002
-
-## 🛠️ Development
-
-### Available Scripts
+### Development
 
 ```bash
-# Development
-pnpm dev              # Start all services (frontend + backend)
-pnpm dev:all          # Start all services including Electron
+# Start all services (Frontend + Backend)
+pnpm dev
 
-# Build
-pnpm build            # Build all workspaces
-pnpm --filter renderer build  # Build frontend only
-pnpm --filter api build       # Build backend only
-pnpm --filter main build      # Build Electron only
+# Start individual services
+pnpm --filter renderer dev  # Frontend (http://localhost:3000)
+pnpm --filter api dev       # Backend (http://localhost:3002)
 
-# Clean
-pnpm clean            # Clean all build outputs
-```
-
-### Project Structure
-
-```
-├── apps/
-│   ├── main/                 # Electron main process
-│   │   ├── src/
-│   │   │   └── main.ts      # Main process entry
-│   │   └── package.json
-│   ├── renderer/             # React frontend
-│   │   ├── src/
-│   │   │   ├── components/   # React components
-│   │   │   ├── App.tsx       # Main app component
-│   │   │   └── main.tsx      # Frontend entry
-│   │   └── package.json
-│   └── api/                  # Express backend
-│       ├── src/
-│       │   └── server.ts     # API server
-│       └── package.json
-├── shared/                   # Shared code
-│   ├── types/               # TypeScript type definitions
-│   ├── constants/           # Shared constants
-│   └── utils/               # Utility functions
-└── docs/                    # Documentation
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# API Configuration
-PORT=3002
-
-# Gmail OAuth2
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=http://localhost:3002/auth/google/callback
-
-# OpenAI API
-OPENAI_API_KEY=your_openai_api_key
-
-# WordPress
-WORDPRESS_URL=your_wordpress_site_url
-WORDPRESS_USERNAME=your_username
-WORDPRESS_APPLICATION_PASSWORD=your_app_password
-```
-
-## 📚 Documentation
-
-- [Architecture Guide](docs/ARCHITECTURE.md)
-- [Implementation Plan](docs/IMPLEMENTATION_PLAN.md)
-- [API Documentation](docs/API.md)
-- [Development Guide](docs/DEVELOPMENT.md)
-
-## 🧪 Testing
-
-```bash
-# Run tests
-pnpm test
-
-# Run tests with coverage
-pnpm test:coverage
-```
-
-## 📦 Build for Production
-
-```bash
-# Build all workspaces
+# Build for production
 pnpm build
 
-# Create Electron app
-pnpm --filter main build
+# Run tests (coming soon)
+pnpm test
 ```
+
+## 📱 Usage
+
+1. **Start the application** - `pnpm dev`
+2. **Open browser** - http://localhost:3000
+3. **Connect Gmail** - OAuth2 authentication
+4. **Select emails** - Choose emails to convert
+5. **AI Analysis** - Let AI analyze content
+6. **Edit article** - Modify content as needed
+7. **Publish** - Send to WordPress
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, TypeScript, Material-UI, Vite
+- **Backend**: Node.js, Express, TypeScript
+- **Desktop**: Electron 28
+- **Package Manager**: pnpm (workspaces)
+- **State Management**: Zustand
+- **Build Tools**: Vite, TypeScript
+- **Image Processing**: Sharp
+- **AI**: OpenAI/Anthropic APIs
+
+## 📋 Development Status
+
+### ✅ Completed (Phase 1)
+- [x] Project setup with pnpm workspaces
+- [x] TypeScript configuration
+- [x] Basic UI with Material-UI
+- [x] Express backend with health check
+- [x] Vite development server
+- [x] Proxy configuration
+- [x] Shared types and constants
+
+### 🚧 In Progress (Phase 2)
+- [ ] Gmail OAuth2 integration
+- [ ] Email fetching and parsing
+- [ ] Email list UI component
+- [ ] Error handling and loading states
+
+### 📅 Planned
+- [ ] AI integration (Phase 3)
+- [ ] Article management (Phase 4)
+- [ ] WordPress integration (Phase 5)
+- [ ] Image processing (Phase 6)
+- [ ] Electron desktop app (Phase 7)
+- [ ] Testing and optimization (Phase 8)
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Setup
+
+```bash
+# Fork and clone
+git clone https://github.com/your-username/MailToWP.git
+cd MailToWP
+
+# Install dependencies
+pnpm install
+
+# Start development
+pnpm dev
+
+# Run tests
+pnpm test
+
+# Build
+pnpm build
+```
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-If you have any questions or need help, please:
-
-1. Check the [documentation](docs/)
-2. Search [existing issues](https://github.com/yourusername/mailtowp-v2/issues)
-3. Create a [new issue](https://github.com/yourusername/mailtowp-v2/issues/new)
-
-## 🗺️ Roadmap
-
-- [x] **Phase 1**: Setup and basic UI
-- [ ] **Phase 2**: Gmail Integration
-- [ ] **Phase 3**: AI Integration
-- [ ] **Phase 4**: Image Processing
-- [ ] **Phase 5**: Article Management
-- [ ] **Phase 6**: WordPress Integration
-- [ ] **Phase 7**: Polish and Testing
 
 ## 🙏 Acknowledgments
 
 - [React](https://reactjs.org/) - UI framework
 - [Material-UI](https://mui.com/) - Component library
 - [Electron](https://www.electronjs.org/) - Desktop framework
-- [Express](https://expressjs.com/) - Backend framework
+- [Express](https://expressjs.com/) - Web framework
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [OpenAI](https://openai.com/) - AI capabilities
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/mbatorowicz/MailToWP/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/mbatorowicz/MailToWP/discussions)
+- **Email**: [Contact via GitHub](https://github.com/mbatorowicz)
 
 ---
 
